@@ -12,8 +12,10 @@ import Layout from '../Layout/Layout';
 import { fonts } from '../../utils/fonts';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { colors } from '../../utils/colors';
+import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
+  const navigation = useNavigation();
   return (
     <Layout>
       <ScrollView
@@ -34,7 +36,10 @@ const Login = () => {
             keyboardType="email-address"
           />
         </View>
-        <TouchableOpacity style={styles.signupBtn}>
+        <TouchableOpacity
+          style={styles.signupBtn}
+          onPress={() => navigation.navigate('Otp')}
+        >
           <Text style={styles.btnText}>Signup</Text>
         </TouchableOpacity>
         <Text>--or--</Text>
@@ -72,6 +77,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
+    gap: 10,
     height: 50,
     paddingHorizontal: 10,
     backgroundColor: 'transparent',
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
   googleBtn: {
     width: '100%',
     height: 50,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff90',
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',

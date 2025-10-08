@@ -18,7 +18,7 @@ const App = () => {
   const AuthStack = () => {
     return (
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="Otp"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={Login} />

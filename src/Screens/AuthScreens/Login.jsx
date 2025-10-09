@@ -1,21 +1,59 @@
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../Layout/Layout';
 import { fonts } from '../../utils/fonts';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import { colors } from '../../utils/colors';
 import { useNavigation } from '@react-navigation/native';
+import { validateEmail } from './../../utils/validations';
+import { authService } from './../../services/AuthService';
 
 const Login = () => {
   const navigation = useNavigation();
+  // Loading State
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+
+  // handle chagne the email
+  const handleChange = text => {
+    setEmail(text);
+    if (email.length > 3 && !validateEmail(text)) {
+      setError('Please enter a valid email');
+    } else {
+      setError('');
+    }
+  };
+
+  const handleSignup = async () => {
+    try {
+      setIsLoading(true);
+      const data = await authService.login(email);
+      console.info(data);
+      console.info(data);
+      if (data?.status) {
+        navigation.navigate('Otp', { email });
+      } else {
+        ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <ScrollView
@@ -34,13 +72,21 @@ const Login = () => {
             style={styles.inputText}
             placeholder="Enter your email"
             keyboardType="email-address"
+            value={email}
+            onChangeText={text => handleChange(text)}
           />
         </View>
+        {error && <Text style={styles.errorText}>{error}</Text>}
         <TouchableOpacity
           style={styles.signupBtn}
-          onPress={() => navigation.navigate('Otp')}
+          disabled={error !== '' || email === ''}
+          onPress={handleSignup}
         >
-          <Text style={styles.btnText}>Signup</Text>
+          {isLoading ? (
+            <ActivityIndicator size={'small'} color={'#fff'} />
+          ) : (
+            <Text style={styles.btnText}>Signup</Text>
+          )}
         </TouchableOpacity>
         <Text style={styles.orText}>── or ──</Text>
         <TouchableOpacity style={styles.googleBtn}>
@@ -128,6 +174,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: fonts.medium,
     color: '#000000',
+  },
+  errorText: {
+    fontSize: 12,
+    fontFamily: fonts.regular,
+    color: 'red',
   },
 });
 

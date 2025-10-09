@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Image,
   ScrollView,
@@ -9,35 +10,107 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Layout from '../Layout/Layout';
 import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
+import { useRoute } from '@react-navigation/native';
+import { authService } from '../../services/AuthService';
 
 const Otp = () => {
+  const route = useRoute();
+  const { email } = route.params;
+  const [time, setTime] = useState(300);
+
   const [otp, setOtp] = useState(['', '', '', '']);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const inputRef = useRef([]);
 
-  const handleOtpChange = (index, value) => {
+  const handleOtpChange = async (index, value) => {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-    console.log(newOtp, index, value);
 
     if (value !== '' && index < 3) {
       setCurrentIndex(index + 1);
       inputRef.current[index + 1].focus();
     }
+
+    const joinedOtp = newOtp.join('');
+    if (joinedOtp.length === 4) {
+      console.info(joinedOtp);
+      try {
+        const data = await authService.verifyOtp(email, joinedOtp);
+        if (data.status) {
+          ToastAndroid.show('OTP verified successfully', ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show(data?.message || 'Invalid OTP', ToastAndroid.SHORT);
+          setOtp(['', '', '', '']);
+          inputRef.current[0].focus();
+        }
+      } catch (error) {
+        console.error(error);
+        ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
+      }
+    }
   };
 
   const handleKeyPress = (e, index) => {
-    if (e.nativeEvent.key === 'Backspace' && index > 0 && otp[index] === '') {
+    if (e.nativeEvent.key === 'Backspace' && index > 0) {
       setCurrentIndex(index - 1);
       inputRef.current[index - 1].focus();
     }
   };
+
+  const handleVerify = async () => {
+    try {
+      const newOtp = otp.join('');
+      if (newOtp.length === 4) {
+        const data = await authService.verifyOtp(email, newOtp);
+        if (data.status) {
+          ToastAndroid.show('OTP verified successfully', ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show(data?.message, ToastAndroid.SHORT);
+          otp.every(item => (item = ''));
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  function minutesToTime(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}:${mins.toString().padStart(2, '0')}`;
+  }
+
+  const resetOtp = async () => {
+    try {
+      if (time !== 0) {
+        ToastAndroid.show('Please wait for 5 minutes', ToastAndroid.SHORT);
+        return;
+      }
+      const data = await authService.login(email);
+      if (data.status) {
+        ToastAndroid.show('OTP sent successfully', ToastAndroid.SHORT);
+        setTime(300);
+      } else {
+        ToastAndroid.show('Something went wrong', ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (time > 0) {
+      setTimeout(() => {
+        setTime(time - 1);
+      }, 1000);
+    }
+  }, [time]);
 
   return (
     <Layout>
@@ -62,7 +135,7 @@ const Otp = () => {
               maxLength={1}
               value={item}
               keyboardType="numeric"
-              selectionColor={colors.primary}
+              selectionColor={item === '' ? colors.primary : '#fff'}
               onChangeText={value => handleOtpChange(index, value)}
               onFocus={() => setCurrentIndex(index)}
               onKeyPress={e => handleKeyPress(e, index)}
@@ -70,20 +143,23 @@ const Otp = () => {
           ))}
         </View>
 
- <TouchableOpacity
+        <TouchableOpacity
           style={styles.verifyButton}
           // onPress={handleVerify}
-          activeOpacity={0.8}>
+          activeOpacity={0.8}
+          onPress={handleVerify}
+        >
           <Text style={styles.verifyButtonText}>Verify OTP</Text>
         </TouchableOpacity>
 
         <View style={styles.resendContainer}>
           <Text style={styles.resendText}>Didn't receive the code? </Text>
-          <TouchableOpacity >
-            <Text style={styles.resendLink}>Resend</Text>
+          <TouchableOpacity disabled={time > 0} onPress={resetOtp}>
+            <Text style={styles.resendLink}>
+              {time > 0 ? `Resend in ${minutesToTime(time)}s` : 'Resend'}
+            </Text>
           </TouchableOpacity>
         </View>
-
       </ScrollView>
     </Layout>
   );
@@ -132,7 +208,7 @@ const styles = StyleSheet.create({
   },
   verifyButton: {
     backgroundColor: colors.primary,
-    paddingVertical: 15,
+    paddingVertical: 12,
     paddingHorizontal: 80,
     borderRadius: 10,
     marginTop: 10,

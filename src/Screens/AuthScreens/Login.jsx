@@ -42,7 +42,7 @@ const Login = () => {
         >
           <Text style={styles.btnText}>Signup</Text>
         </TouchableOpacity>
-        <Text>--or--</Text>
+        <Text style={styles.orText}>── or ──</Text>
         <TouchableOpacity style={styles.googleBtn}>
           <Image
             style={styles.googleIcon}
@@ -104,6 +104,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.medium,
     color: '#ffffff',
   },
+  orText: {
+    fontSize: 16,
+    fontFamily: fonts.regular,
+    color: '#000000',
+  },
   googleBtn: {
     width: '100%',
     height: 50,
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
     height: 30,
   },
   googleText: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: fonts.medium,
     color: '#000000',
   },

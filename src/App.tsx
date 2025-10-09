@@ -18,8 +18,10 @@ const App = () => {
   const AuthStack = () => {
     return (
       <Stack.Navigator
-        initialRouteName="Otp"
-        screenOptions={{ headerShown: false }}
+        initialRouteName="Login"
+        screenOptions={{ headerShown: false,
+          animation: 'slide_from_right'
+         }}
       >
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Otp" component={Otp} />

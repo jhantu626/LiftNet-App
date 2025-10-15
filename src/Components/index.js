@@ -1,3 +1,7 @@
+// INPUTS
 import Input from './Inputs/Input';
 
-export { Input };
+// HEADERS
+import PrimaryHeader from './Headers/PrimaryHeader';
+
+export { Input, PrimaryHeader };

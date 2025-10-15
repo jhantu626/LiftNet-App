@@ -3,13 +3,17 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Home, Login, Otp } from './Screens';
+import { Home, Jobs, Login, Otp, Profile, SaveJobs } from './Screens';
 import { NavigationContainer } from '@react-navigation/native';
+import { AuthProvider, useAuth } from './contexts';
+
 //Icons
 import { FontAwesome } from '@react-native-vector-icons/fontawesome';
 
 import { colors } from './utils/colors';
 import { fonts } from './utils/fonts';
+import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
+import Lucide from '@react-native-vector-icons/lucide';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -19,9 +23,7 @@ const App = () => {
     return (
       <Stack.Navigator
         initialRouteName="Login"
-        screenOptions={{ headerShown: false,
-          animation: 'slide_from_right'
-         }}
+        screenOptions={{ headerShown: false, animation: 'slide_from_right' }}
       >
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Otp" component={Otp} />
@@ -41,6 +43,7 @@ const App = () => {
             fontSize: 12,
             fontFamily: fonts.medium,
           },
+          animation: 'shift',
         }}
       >
         <Tab.Screen
@@ -48,23 +51,55 @@ const App = () => {
           component={Home}
           options={{
             tabBarIcon: ({ color }) => (
-              <FontAwesome name="home" size={24} color={color} />
+              <MaterialDesignIcons name="home" size={24} color={color} />
             ),
           }}
         />
+        <Tab.Screen
+          name="Apply"
+          component={Jobs}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Lucide name="send" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="My Jobs"
+          component={SaveJobs}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Lucide name="bookmark" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <FontAwesome name="user" size={24} color={color} />
+            ),
+          }}
+        />
+        
       </Tab.Navigator>
     );
   };
 
-  const isLoagin = false;
+  const AppNav = () => {
+    const { authenticated } = useAuth();
+    return (
+      <NavigationContainer>
+        {authenticated ? <AppStack /> : <AuthStack />}
+      </NavigationContainer>
+    );
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar barStyle={'dark-content'}/>
-      <NavigationContainer>
-        {isLoagin ? <AppStack /> : <AuthStack />}
-      </NavigationContainer>
-    </SafeAreaView>
+    <AuthProvider>
+      <AppNav />
+    </AuthProvider>
   );
 };
 

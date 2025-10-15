@@ -16,8 +16,10 @@ import { colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
 import { useRoute } from '@react-navigation/native';
 import { authService } from '../../services/AuthService';
+import { useAuth } from '../../contexts';
 
 const Otp = () => {
+  const { login } = useAuth();
   const route = useRoute();
   const { email } = route.params;
   const [time, setTime] = useState(300);
@@ -39,11 +41,11 @@ const Otp = () => {
 
     const joinedOtp = newOtp.join('');
     if (joinedOtp.length === 4) {
-      console.info(joinedOtp);
       try {
         const data = await authService.verifyOtp(email, joinedOtp);
         if (data.status) {
           ToastAndroid.show('OTP verified successfully', ToastAndroid.SHORT);
+          await login(data.token);
         } else {
           ToastAndroid.show(data?.message || 'Invalid OTP', ToastAndroid.SHORT);
           setOtp(['', '', '', '']);
@@ -70,6 +72,7 @@ const Otp = () => {
         const data = await authService.verifyOtp(email, newOtp);
         if (data.status) {
           ToastAndroid.show('OTP verified successfully', ToastAndroid.SHORT);
+          await login(data.token);
         } else {
           ToastAndroid.show(data?.message, ToastAndroid.SHORT);
           otp.every(item => (item = ''));

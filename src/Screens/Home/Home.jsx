@@ -2,7 +2,12 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { fonts } from './../../utils/fonts';
 import Layout from '../Layout/Layout';
-import { Input, PrimaryHeader, SearchInput } from './../../Components';
+import {
+  Input,
+  LocationInput,
+  PrimaryHeader,
+  SearchInput,
+} from './../../Components';
 
 const Home = () => {
   return (
@@ -15,6 +20,7 @@ const Home = () => {
       >
         <View style={styles.searchContainer}>
           <SearchInput />
+          <LocationInput />
         </View>
       </ScrollView>
     </Layout>

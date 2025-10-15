@@ -8,18 +8,8 @@ const Input = ({
   otherStyles = {},
 }) => {
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          width: width,
-          height: height,
-          backgroundColor: backgroundColor,
-        },
-        otherStyles,
-      ]}
-    >
-      <Text>Input</Text>
+    <View>
+      
     </View>
   );
 };

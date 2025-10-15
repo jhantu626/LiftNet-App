@@ -1,6 +1,5 @@
-import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StatusBar, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home, Jobs, Login, Otp, Profile, SaveJobs } from './Screens';
@@ -82,7 +81,6 @@ const App = () => {
             ),
           }}
         />
-        
       </Tab.Navigator>
     );
   };

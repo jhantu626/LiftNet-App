@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {fonts} from './../../utils/fonts'
+import { fonts } from './../../utils/fonts';
+import Layout from '../Layout/Layout';
 
 const Home = () => {
   return (
-    <View>
-      <Text style={{ fontSize: 30,fontFamily: fonts.bold }}>Home</Text>
-    </View>
+    <Layout>
+      <Text style={fonts.h1}>Home</Text>
+    </Layout>
   );
 };
 

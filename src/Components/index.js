@@ -6,4 +6,7 @@ import LocationInput from './Inputs/LocationInput';
 // HEADERS
 import PrimaryHeader from './Headers/PrimaryHeader';
 
-export { Input, PrimaryHeader, SearchInput, LocationInput };
+// BAR LINE
+import PrimaryBar from './Bar/PrimaryBar';
+
+export { Input, PrimaryHeader, SearchInput, LocationInput, PrimaryBar };

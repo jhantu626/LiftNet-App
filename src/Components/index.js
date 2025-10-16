@@ -5,8 +5,16 @@ import LocationInput from './Inputs/LocationInput';
 
 // HEADERS
 import PrimaryHeader from './Headers/PrimaryHeader';
+import SecondaryHeader from './Headers/SecondaryHeader';
 
 // BAR LINE
 import PrimaryBar from './Bar/PrimaryBar';
 
-export { Input, PrimaryHeader, SearchInput, LocationInput, PrimaryBar };
+export {
+  Input,
+  PrimaryHeader,
+  SearchInput,
+  LocationInput,
+  PrimaryBar,
+  SecondaryHeader,
+};

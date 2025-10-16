@@ -6,6 +6,7 @@ import Otp from './AuthScreens/Otp';
 
 // HOME SCREENS
 import Home from './Home/Home';
+import Search from './Home/Search.jsx';
 
 // Jobs
 import Jobs from './Jobs/Jobs.jsx';

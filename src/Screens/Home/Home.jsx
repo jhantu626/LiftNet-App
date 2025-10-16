@@ -11,11 +11,19 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import { colors } from '../../utils/colors';
 import { Text } from 'react-native-gesture-handler';
 import SimpleLineIcons from '@react-native-vector-icons/simple-line-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
+  // NAVIGATION
+  const navigation = useNavigation();
+
   // STATE VARIABLES
   const [search, setSearch] = useState('');
   const [location, setLocation] = useState('');
+
+  const navigateToSearch = name => {
+    navigation.navigate('Search', { name });
+  };
 
   return (
     <Layout>
@@ -26,7 +34,12 @@ const Home = () => {
         showsHorizontalScrollIndicator={false}
       >
         <View style={styles.searchContainer}>
-          <TouchableOpacity style={styles.topSearchContainer}>
+          <TouchableOpacity
+            style={styles.topSearchContainer}
+            onPress={()=>{
+              navigateToSearch('search')
+            }}
+          >
             <Ionicons
               name="search-outline"
               size={24}
@@ -35,7 +48,9 @@ const Home = () => {
             <Text style={styles.searchText}>Search</Text>
           </TouchableOpacity>
           <PrimaryBar marginVertical={0} />
-          <TouchableOpacity style={styles.topSearchContainer}>
+          <TouchableOpacity style={styles.topSearchContainer}  onPress={()=>{
+              navigateToSearch('location')
+            }}>
             <SimpleLineIcons
               name="location-pin"
               size={24}
@@ -71,11 +86,11 @@ const styles = StyleSheet.create({
     // backgroundColor: colors.primaryBackgorund,
     borderRadius: 10,
   },
-  searchText:{
+  searchText: {
     color: colors.placeholder,
     fontSize: 16,
-    fontFamily: 'Poppins-Regular'
-  }
+    fontFamily: 'Poppins-Regular',
+  },
 });
 
 export default Home;

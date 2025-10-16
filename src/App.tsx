@@ -13,6 +13,7 @@ import { colors } from './utils/colors';
 import { fonts } from './utils/fonts';
 import MaterialDesignIcons from '@react-native-vector-icons/material-design-icons';
 import Lucide from '@react-native-vector-icons/lucide';
+import Search from './Screens/Home/Search';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -26,6 +27,38 @@ const App = () => {
       >
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Otp" component={Otp} />
+      </Stack.Navigator>
+    );
+  };
+
+  // HOME STACK
+  const HomeStack = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName="Search"
+        screenOptions={{
+          headerShown: false,
+          animation: 'slide_from_left'
+        }}
+      >
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Search" component={Search} options={{
+          animation: 'slide_from_bottom',
+          transitionSpec: {
+            open: {
+              animation: 'timing',
+              config: {
+                duration: 300,
+              },
+            },
+            close: {
+              animation: 'timing',
+              config: {
+                duration: 300,
+              },
+            },
+          }
+        }} />
       </Stack.Navigator>
     );
   };
@@ -47,7 +80,7 @@ const App = () => {
       >
         <Tab.Screen
           name="Home"
-          component={Home}
+          component={HomeStack}
           options={{
             tabBarIcon: ({ color }) => (
               <MaterialDesignIcons name="home" size={24} color={color} />

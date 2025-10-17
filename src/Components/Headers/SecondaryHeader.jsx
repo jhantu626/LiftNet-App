@@ -2,11 +2,18 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import { fonts } from '../../utils/fonts';
+import { useNavigation } from '@react-navigation/native';
 
 const SecondaryHeader = ({ title = 'HOME' }) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.back}>
+      <TouchableOpacity
+        style={styles.back}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
         <Ionicons name="chevron-back" size={24} color="black" />
       </TouchableOpacity>
       <Text style={styles.titleText}>{title}</Text>
@@ -26,7 +33,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   back: {
-    alignItems: 'center',
+    // alignItems: 'center',
     justifyContent: 'center',
     width: 40,
     height: 40,

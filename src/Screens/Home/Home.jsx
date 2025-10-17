@@ -1,7 +1,14 @@
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, { useState } from 'react';
 import Layout from '../Layout/Layout';
 import {
+  JobCard,
   LocationInput,
   PrimaryBar,
   PrimaryHeader,
@@ -12,6 +19,7 @@ import { colors } from '../../utils/colors';
 import { Text } from 'react-native-gesture-handler';
 import SimpleLineIcons from '@react-native-vector-icons/simple-line-icons';
 import { useNavigation } from '@react-navigation/native';
+import { fonts } from '../../utils/fonts';
 
 const Home = () => {
   // NAVIGATION
@@ -36,8 +44,8 @@ const Home = () => {
         <View style={styles.searchContainer}>
           <TouchableOpacity
             style={styles.topSearchContainer}
-            onPress={()=>{
-              navigateToSearch('search')
+            onPress={() => {
+              navigateToSearch('Search');
             }}
           >
             <Ionicons
@@ -48,9 +56,12 @@ const Home = () => {
             <Text style={styles.searchText}>Search</Text>
           </TouchableOpacity>
           <PrimaryBar marginVertical={0} />
-          <TouchableOpacity style={styles.topSearchContainer}  onPress={()=>{
-              navigateToSearch('location')
-            }}>
+          <TouchableOpacity
+            style={styles.topSearchContainer}
+            onPress={() => {
+              navigateToSearch('Location');
+            }}
+          >
             <SimpleLineIcons
               name="location-pin"
               size={24}
@@ -61,6 +72,21 @@ const Home = () => {
         </View>
 
         <PrimaryBar />
+
+        <View style={styles.searchTitle}>
+          <Text style={styles.jobsTitleText}>Jobs For You</Text>
+          <Text style={styles.jobsSubTitleText}>
+            Jobs based on your activity
+          </Text>
+        </View>
+
+        <FlatList
+          style={{ flex: 1 }}
+          contentContainerStyle={styles.jobContainer}
+          data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+          keyExtractor={(_, index) => 'jobcard-' + index}
+          renderItem={(item, index) => <JobCard />}
+        />
       </ScrollView>
     </Layout>
   );
@@ -90,6 +116,25 @@ const styles = StyleSheet.create({
     color: colors.placeholder,
     fontSize: 16,
     fontFamily: 'Poppins-Regular',
+  },
+  searchTitle: {
+    paddingHorizontal: 10,
+    gap: 2,
+  },
+  jobsTitleText: {
+    fontSize: 20,
+    marginBottom: 4,
+    fontWeight: fonts.bold,
+  },
+  jobsSubTitleText: {
+    fontSize: 16,
+    fontWeight: fonts.regular,
+     marginBottom: 4,
+  },
+  jobContainer: {
+    paddingHorizontal: 10,
+    marginTop: 10,
+    gap: 10,
   },
 });
 

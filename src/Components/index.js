@@ -10,6 +10,9 @@ import SecondaryHeader from './Headers/SecondaryHeader';
 // BAR LINE
 import PrimaryBar from './Bar/PrimaryBar';
 
+// CARDS
+import JobCard from './Cards/JobCard';
+
 export {
   Input,
   PrimaryHeader,
@@ -17,4 +20,5 @@ export {
   LocationInput,
   PrimaryBar,
   SecondaryHeader,
+  JobCard,
 };
